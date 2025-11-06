@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { TbLayoutSidebarLeftExpand, TbLayoutSidebarLeftCollapseFilled  } from "react-icons/tb";
-import { Menus } from '../datas/sidebar';
+import { Menus } from '../../datas/sidebar';
 import { FaChevronDown, FaChevronRight } from 'react-icons/fa6';
 
 function SideBar() {
