@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useEffect } from 'react'
 import SideBar from '../components/SideBar';
+import Contents from '../components/Contents';
 
 function App() {
   const [data, setData] = useState([]);
@@ -11,8 +12,9 @@ function App() {
   //   .catch(err => console.log(err));
   // }, [])
   return (
-  <div>
+  <div className='w-full flex'>
     <SideBar />
+    <Contents />
   </div>
   )
 }
