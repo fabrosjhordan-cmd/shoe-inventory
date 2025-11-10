@@ -6,11 +6,11 @@ import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 import { AiOutlineProduct } from "react-icons/ai";
 
 export const Menus = [
-    {title: 'Dashboard', icon: <MdSpaceDashboard />, page: 'Dashboard'},
-    {title: 'Inbox', icon: <BiChat />, gap: true, subMenu: ['Requested Message', 'Unread Message', 'All Message'], key: 'inbox'},
-    {title: 'Inventory', icon: <MdOutlineInventory2 />, page: 'Inventory'},
-    {title: 'Sales', icon: <LiaFileInvoiceDollarSolid />, page: 'Sales'},
-    {title: 'Tables', icon: <FiTable />, page: 'Tables'},
-    {title: 'Products', icon: <AiOutlineProduct />, page: 'Products'},
-    {title: 'Setting', icon: <FaGears />, subMenu: ['General', 'Security', 'Notifications'], key: 'settings'}
+    {title: 'Dashboard', icon: <MdSpaceDashboard />, page: '/'},
+    {title: 'Inbox', icon: <BiChat />, gap: true, subMenu: ['Requested Message', 'Unread Message', 'All Message'], key: 'inbox', supage: ['/Requested', '/Unread', '/All']},
+    {title: 'Inventory', icon: <MdOutlineInventory2 />, page: '/Inventory'},
+    {title: 'Sales', icon: <LiaFileInvoiceDollarSolid />, page: '/Sales'},
+    {title: 'Tables', icon: <FiTable />, page: '/Tables'},
+    {title: 'Products', icon: <AiOutlineProduct />, page: '/Products'},
+    {title: 'Setting', icon: <FaGears />, subMenu: ['General', 'Security', 'Notifications'], key: 'settings', subpage: ['/General', '/Security', '/Notifications']}
 ]

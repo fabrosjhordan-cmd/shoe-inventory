@@ -1,9 +1,13 @@
 
 function InventoryGraph() {
   return (
-<div className='px-12 '>
+<div className='px-12 mt-2'>
     {/* Inventory Graph */}
-        <div className="w-full bg-white mt-2 rounded-lg shadow-sm p-4 md:p-6">
+        <div className='text-center'>
+                    <h2 className='text-xl font-semibold text-gray-800'>Total Sales</h2>
+                    <div className='h-[3px] w-72 bg-zinc-700 mt-1 mx-auto'></div>
+        </div>
+        <div className="w-full bg-white rounded-lg shadow-sm p-4 md:p-6">
             <div className="flex justify-between mb-5">
             <div>
                 <h5 className="leading-none text-3xl font-bold text-gray-900 pb-2">$12,423</h5>

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useEffect } from 'react'
 import SideBar from '../components/SideBar';
-import Contents from '../components/Contents';
+import Content from '../components/Contents';
 
-function App() {
+function App({link, page}) {
   const [data, setData] = useState([]);
   // useEffect(()=>{
   //   fetch('http://localhost:8081/users')
@@ -13,8 +13,9 @@ function App() {
   // }, [])
   return (
   <div className='w-full flex'>
-    <SideBar />
-    <Contents />
+    <SideBar page={page} />
+    <Content link={link}/>
+    
   </div>
   )
 }
