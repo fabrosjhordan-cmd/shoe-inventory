@@ -7,8 +7,6 @@ import { Link } from 'react-router-dom';
 function SideBar({page}) {
 const [open, setOpen] =useState(true);
 const [subMenus, setSubMenus] = useState({
-    calendar: false,
-    support: false,
     table: false,
     analytics: false
 });

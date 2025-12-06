@@ -7,14 +7,15 @@ import ErrorPage from '../components/ErrorPage.jsx';
 import Inventory from './Inventory.jsx';
 import Sales from './Sales.jsx';
 import TablesPage from './TablesPage.jsx';
-import Products from './Products.jsx';
+import Products from './Products/index.jsx';
+import ProductDetails from './Products/ProductDetails.jsx';
 
 const router = createBrowserRouter([
   {path: '/', element: <App link='/' page={0} />},
   {path: '/inventory', element: <Inventory link='inventory' page={2}/>},
-  {path: '/sales', element: <Sales page={3}/>},
-  {path: '/tables', element: <TablesPage link='tables' page={4} />},
-  {path: '/products', element: <Products link='products' page={5} />},
+  {path: '/sales', element: <Sales link='sales' page={3}/>},
+  {path: '/products', element: <Products link='products' page={4} />},
+  {path: '/products/productdetails', element: <ProductDetails link='productDetails' />},
   {path: '*', element: <ErrorPage />}
 ]);
 
