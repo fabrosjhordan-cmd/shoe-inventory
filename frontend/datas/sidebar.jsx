@@ -11,6 +11,5 @@ export const Menus = [
     {title: 'Sales', icon: <LiaFileInvoiceDollarSolid />, page: '/Sales'},
     {title: 'Products', icon: <AiOutlineProduct />, page: '/Products'},
     {title: 'Setting', icon: <FaGears />, subMenu: ['General', 'Security', 'Notifications'], key: 'settings', subpage: ['/General', '/Security', '/Notifications']},
-    {title: 'Products', icon: <AiOutlineProduct />, page: '/Products/ProductDetails'},
     
 ]

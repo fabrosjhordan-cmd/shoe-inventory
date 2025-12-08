@@ -6,9 +6,9 @@ import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import ErrorPage from '../components/ErrorPage.jsx';
 import Inventory from './Inventory.jsx';
 import Sales from './Sales.jsx';
-import TablesPage from './TablesPage.jsx';
 import Products from './Products/index.jsx';
 import ProductDetails from './Products/ProductDetails.jsx';
+import Login from './Auth/Login.jsx';
 
 const router = createBrowserRouter([
   {path: '/', element: <App link='/' page={0} />},
@@ -16,6 +16,7 @@ const router = createBrowserRouter([
   {path: '/sales', element: <Sales link='sales' page={3}/>},
   {path: '/products', element: <Products link='products' page={4} />},
   {path: '/products/productdetails', element: <ProductDetails link='productDetails' />},
+  {path: '/auth/login', element: <Login />},
   {path: '*', element: <ErrorPage />}
 ]);
 
