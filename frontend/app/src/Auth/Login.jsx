@@ -3,16 +3,25 @@ import { IoMdMail } from "react-icons/io";
 import { FaLock, FaCheck   } from "react-icons/fa";
 import { GiRunningShoe  } from "react-icons/gi";
 import { supabase } from "../supabaseClient";
+import { useAuth } from "../../provider/AuthProvider";
+import { Navigate } from "react-router-dom";
 
 function login() {
-
   const [active, setActive ] = useState('Sign-In');
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = async (e) =>{
-      setLoading(true)
+  const handleLogin = async (event) =>{
+    event.preventDefault();
+    setLoading(true);
+    const {error} = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+    if(error) console.log(error.message)
+    handleClear();
+    setLoading(false);
   }
 
   const handleSignup = async(event) => {
@@ -24,15 +33,24 @@ function login() {
     });
 
     if(error) console.log(error.message)
-    setLoading(false)
+    setLoading(false);
   }
 
-  const handleClear = (event) =>{
-    event.preventDefault();
+  const handleClear = () =>{
     setLoading(true);
     setEmail('')
     setPassword('')
     setLoading(false);
+  }
+
+  const { session, profile } = useAuth();
+  
+  useEffect(() => {
+    console.log(profile);
+  }, [])
+  
+  if(session){
+    return <Navigate to={'/'} replace />
   }
 
   return (
@@ -57,7 +75,7 @@ function login() {
 
     {/* Login Form Sign-In */}
     {active === 'Sign-In' &&
-      <div className='flex flex-col p-2 gap-3 shadow-l-3xl w-screen max-w-[30%] h-screen text-center items-center justify-center'> 
+      <form onSubmit={handleLogin} className='flex flex-col p-2 gap-3 shadow-l-3xl w-screen max-w-[30%] h-screen text-center items-center justify-center'> 
         {/* Logo */}
         <div className="relative w-32 h-32 flex items-center justify-center">
           {/* <GiRunningShoe  className="w-32 h-32 text-orange-500 p-4 border-1 rounded-full z-20"/> */}
@@ -72,17 +90,17 @@ function login() {
         {/* Email */}
         <div className="relative w-full max-w-[80%]">
           <IoMdMail className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-600'/>
-          <input type='email' className='border-b-3 border-zinc-400 max-h-12 w-full p-2 pl-10 placeholder-gray-700 shadow-sm' placeholder={'Email'} />
+          <input type='email' className='border-b-3 border-zinc-400 max-h-12 w-full p-2 pl-10 placeholder-gray-700 shadow-sm' placeholder={'Email'} value={email} onChange={(e)=>setEmail(e.target.value)} required={true}/>
         </div>
 
         {/* Password */}
         <div className='relative w-full max-w-[80%]'>
         <FaLock className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-600' />
-          <input type='password' className='border-b-3 border-zinc-400 max-h-12 w-full p-2 pl-10 placeholder-gray-700 shadow-sm' placeholder='Password'/> 
+          <input type='password' className='border-b-3 border-zinc-400 max-h-12 w-full p-2 pl-10 placeholder-gray-700 shadow-sm' placeholder='Password' value={password} onChange={(e)=> setPassword(e.target.value)} required={true}/> 
         </div>
         <button className='w-full max-w-[80%] border-1 border-orange-500 bg-transparent font-bold text-orange-500 rounded-xl py-1 px-7 hover:cursor-pointer hover:text-orange-400 hover:border-orange-400 hover:bg-zinc-100'>Sign In</button>
         <h3 className='text-sm font-semibold text-orange-700 hover:cursor-pointer hover:text-orange-500'>Forgot Password?</h3>
-      </div>
+      </form>
     }
 
     {/* Login Form Sign-Up */}
@@ -108,9 +126,9 @@ function login() {
           <FaLock className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-600' />
             <input type='password' className='border-b-3 border-zinc-400 max-h-12 w-full p-2 pl-10 placeholder-gray-700 shadow-sm' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)} required={true}/> 
           </div>
-          <button className='w-full max-w-[80%] border-1 border-orange-500 bg-transparent font-bold text-orange-500 rounded-xl py-1 px-7 hover:cursor-pointer hover:text-orange-400 hover:border-orange-400 hover:bg-zinc-100' onClick={handleSignup} disabled={loading}>{loading ? 'Creating Account...' : 'Create Account'}</button>
-          <button className='w-full max-w-[80%] border-1 border-orange-500 bg-orange-500 font-bold text-white rounded-xl py-1 px-7 hover:cursor-pointer hover:text-orange-200 hover:border-orange-400/80 hover:bg-orange-500/80' onClick={handleClear}>{loading ? 'Clearing...' : 'Clear'}</button>
-
+          
+          <button className='w-full max-w-[80%] border-1 border-orange-500 bg-transparent font-bold text-orange-500 rounded-xl py-1 px-7 hover:cursor-pointer hover:text-orange-400 hover:border-orange-400 hover:bg-zinc-100' disabled={loading}>{loading ? 'Creating Account...' : 'Create Account'}</button>
+          <button className='w-full max-w-[80%] border-1 border-orange-500 bg-orange-500 font-bold text-white rounded-xl py-1 px-7 hover:cursor-pointer hover:text-orange-200 hover:border-orange-400/80 hover:bg-orange-500/80' onClick={handleClear}>Clear</button>
       </form>
     }
       

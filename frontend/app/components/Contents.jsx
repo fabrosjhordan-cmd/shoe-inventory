@@ -1,14 +1,33 @@
 import { Cards, ShoeDetails } from '../../datas/dummy';
 import InventoryGraph from './InventoryGraph';
-import { FaChevronRight, FaChevronDown, FaChevronLeft   } from "react-icons/fa";
+import { FaChevronRight, FaChevronDown, FaChevronLeft, FaShoppingCart, FaPlus, FaMinus} from "react-icons/fa";
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { FaPrint } from 'react-icons/fa6';
 import { BiShowAlt } from "react-icons/bi";
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
+import { useAuth } from '../provider/AuthProvider';
+import { supabase } from '../src/supabaseClient';
+import { useState } from 'react';
 
+const defaultShoeImage = 'https://imgs.search.brave.com/Phs4SaVGkpkAX3vKTiKToN0MPPFYHPPYJJsgZZ4BvNQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wMDUv/NzIwLzQwOC9zbWFs/bC9jcm9zc2VkLWlt/YWdlLWljb24tcGlj/dHVyZS1ub3QtYXZh/aWxhYmxlLWRlbGV0/ZS1waWN0dXJlLXN5/bWJvbC1mcmVlLXZl/Y3Rvci5qcGc';
 
 function Content({link}) {
+  const [quantity, setQuantity] = useState(1);
 
+  const { session, profile } = useAuth();
+  if(!session){
+    return <Navigate to='/Auth/Login' replace />
+  }
+
+  const handleLogOut = async () =>{
+    console.log(session);
+    console.log(profile)
+    await supabase.auth.signOut()
+  }
+
+  const handleQuantity = () =>{
+
+  }
   
   return (
     <div className='h-screen flex-1 bg-zinc-100 space-y-6'>
@@ -17,8 +36,10 @@ function Content({link}) {
             <div>
                  
             </div>
+            {/* <img src='https://imgs.search.brave.com/ytXuWG7shMoCAkjCE0MeaX60qQNElcAIfPi4Pp1TGrU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9rcG9w/cGluZy5jb20vZG9j/dW1lbnRzLzVjLzAv/Mjc1LzI0MDUxMC10/cmlwbGVTLUluc3Rh/Z3JhbS1Ud2l0dGVy/LVVwZGF0ZS1ZZW9u/amktZG9jdW1lbnRz/LTEud2VicD92PTkx/N2Vi' alt='profile' className='w-10 h-10 rounded-full object-cover object-center cursor-pointer' /> */}
             <div className='flex items-center gap-x-8'>
-                <img src='https://imgs.search.brave.com/ytXuWG7shMoCAkjCE0MeaX60qQNElcAIfPi4Pp1TGrU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9rcG9w/cGluZy5jb20vZG9j/dW1lbnRzLzVjLzAv/Mjc1LzI0MDUxMC10/cmlwbGVTLUluc3Rh/Z3JhbS1Ud2l0dGVy/LVVwZGF0ZS1ZZW9u/amktZG9jdW1lbnRz/LTEud2VicD92PTkx/N2Vi' alt='profile' className='w-10 h-10 rounded-full object-cover object-center cursor-pointer' />
+                <FaShoppingCart  className='w-5.5 h-5.5 hover:cursor-pointer'/>
+                {/* <button className='hover:cursor-pointer' onClick={handleLogOut}>Logout</button> */}
             </div>
         </div>
 
@@ -67,7 +88,7 @@ function Content({link}) {
         <div className='px-12'>
           <div className='place-items-end'>
             {/* <span className='mr-2'></span> */}
-          <button className='flex flex-row items-center justify-center border-1 border-zinc-200 shadow-sm px-3 py-1 gap-2 bg-blue-300 rounded-md'><FaPrint /><span>Print</span></button>
+          <button className='flex flex-row items-center justify-center border-1 border-zinc-200 shadow-sm px-3 py-1 gap-2 bg-blue-300 rounded-md hover:cursor-pointer hover:bg-blue-400'><FaPrint /><span>Print</span></button>
           </div>
           <table className='w-full table-fixed'>
             <thead>
@@ -87,7 +108,6 @@ function Content({link}) {
                 <td className='py-4'>{items.stock}</td>
               </tr>
               ))}
-              <td></td>
             </tbody>
           </table>
         </div>
@@ -106,7 +126,7 @@ function Content({link}) {
         <div className='px-12'>
           <div className='place-items-end'>
             {/* <span className='mr-2'></span> */}
-          <button className='flex flex-row items-center justify-center border-1 border-zinc-200 shadow-sm px-3 py-1 gap-2 bg-blue-300 rounded-md'><FaPrint /><span>Print</span></button>
+          <button className='flex flex-row items-center justify-center border-1 border-zinc-200 shadow-sm px-3 py-1 gap-2 bg-blue-300 rounded-md hover:cursor-pointer hover:bg-blue-400'><FaPrint /><span>Print</span></button>
           </div>
           <table className='w-full table-fixed'>
             <thead>
@@ -128,7 +148,6 @@ function Content({link}) {
                 <td className='py-4'><button className='flex flex-row items-center justify-center border-1 border-zinc-400 shadow-sm px-3 py-1 gap-2 bg-zinc-300 rounded-sm hover:cursor-pointer hover:scale-105'><BiShowAlt /><span>Show</span></button></td>
               </tr>
               ))}
-              <td></td>
             </tbody>
           </table>
         </div>
@@ -312,17 +331,25 @@ function Content({link}) {
           {/* Left Side Part */}
         <div className='w-[45%]'>
          <img src={'https://imgs.search.brave.com/UI1-HvL5tCMmna5yYbfdOfnw2iaNDTsaRvcfVv31GfI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMubmlrZS5jb20v/YS9pbWFnZXMvdF93/ZWJfcHdfNTkyX3Yy/L2ZfYXV0by91XzEy/NmFiMzU2LTQ0ZDgt/NGEwNi04OWI0LWZj/ZGNjOGRmMDI0NSxj/X3NjYWxlLGZsX3Jl/bGF0aXZlLHdfMS4w/LGhfMS4wLGZsX2xh/eWVyX2FwcGx5LzRk/ZTU4M2FhLTAyOGIt/NGRkNS1iMTg5LTQ5/MThjNmU0YjBkMy9K/T1JEQU4rNitSSU5H/Uy5wbmc'} alt='shoe' className='w-120 h-90 my-2 rounded-lg'/>
-         
          </div>
 
           {/* Right Side Part */}
          <div className='w-[50%] flex-wrap'>
-         <h1 className='text-3xl font-semibold my-2'>Jordan 6 Rings</h1>
-         <h3 className='text-xl my-2'>Size: 44</h3>
-         <h3 className='text-xl my-2'>Price: 6244.00 Php</h3>
-         <h3 className='text-xl my-2'>Brand: Jordan</h3>
-         <h3 className='text-md text-zinc-700 my-3'>Current Stock: 20</h3>
-         <button className='w-full border-1 border-zinc-400 shadow-sm rounded-xl bg-blue-700 py-2 my-2 text-xl text-white hover:scale-105 hover:bg-blue-700/90 ease-in-out transition-all duration-200'>Create Purchase Invoice</button>
+          <h1 className='text-3xl font-semibold my-2'>Jordan 6 Rings</h1>
+          <h3 className='text-xl my-2'>Size: 44</h3>
+          <h3 className='text-xl my-2'>Price: 6244.00 Php</h3>
+          <h3 className='text-xl my-2'>Brand: Jordan</h3>
+          <div className='flex flex-row items-center gap-4 my-2'>
+            <h3 className='text-lg my-2'>Quantity: </h3>
+            <FaMinus className='hover:cursor-pointer'/>
+            <input type='number' className='border-1 border-zinc-500 max-w-[40px] text-center' value={quantity} disabled/>
+            <FaPlus className='hover:cursor-pointer' />
+          </div>
+
+          <h3 className='text-md text-zinc-700 my-3'>Current Stock: 20</h3>
+
+          
+          <button className='w-full border-1 border-zinc-400 shadow-sm items-center text-center rounded-xl bg-blue-700 py-2 my-2 text-xl text-white hover:scale-105 hover:bg-blue-700/90 ease-in-out transition-all duration-200 hover:cursor-pointer'>Add to Cart</button>
          </div>
         </div>
 

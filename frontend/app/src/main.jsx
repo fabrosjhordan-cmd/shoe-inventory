@@ -9,6 +9,7 @@ import Sales from './Sales.jsx';
 import Products from './Products/index.jsx';
 import ProductDetails from './Products/ProductDetails.jsx';
 import Login from './Auth/Login.jsx';
+import AuthProvider from '../provider/AuthProvider.jsx';
 
 const router = createBrowserRouter([
   {path: '/', element: <App link='/' page={0} />},
@@ -21,8 +22,10 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById('root')).render(
+  <AuthProvider>
   <StrictMode>
     {/* <App /> */}
     <RouterProvider router={router} />
   </StrictMode>,
+  </AuthProvider>
 )
