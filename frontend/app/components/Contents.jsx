@@ -4,31 +4,38 @@ import { FaChevronRight, FaChevronDown, FaChevronLeft, FaShoppingCart, FaPlus, F
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { FaPrint } from 'react-icons/fa6';
 import { BiShowAlt } from "react-icons/bi";
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import { useAuth } from '../provider/AuthProvider';
 import { supabase } from '../src/supabaseClient';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useProductList } from '../api/products';
 
 const defaultShoeImage = 'https://imgs.search.brave.com/Phs4SaVGkpkAX3vKTiKToN0MPPFYHPPYJJsgZZ4BvNQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wMDUv/NzIwLzQwOC9zbWFs/bC9jcm9zc2VkLWlt/YWdlLWljb24tcGlj/dHVyZS1ub3QtYXZh/aWxhYmxlLWRlbGV0/ZS1waWN0dXJlLXN5/bWJvbC1mcmVlLXZl/Y3Rvci5qcGc';
 
-function Content({link}) {
-  const [quantity, setQuantity] = useState(1);
+function Content({link, productId}) {
+  const { session, loading } = useAuth(); 
+  const {quantity, setQuantity} = useState(1);
+  const {data: products, error, isLoading} = useProductList();
+  const product = products?.find(p=> p.id === productId)
 
-  const { session, profile } = useAuth();
+  if (loading || isLoading) return <div className='text-center w-full'>Loading...</div>
+  if(error) return <h3>{error.message}</h3>
   if(!session){
     return <Navigate to='/Auth/Login' replace />
   }
 
-  const handleLogOut = async () =>{
-    console.log(session);
-    console.log(profile)
-    await supabase.auth.signOut()
-  }
+    const handleSignOut = async () =>{
+      const { error } = await supabase.auth.signOut();
+      console.log(session)
+      if(error){
+        console.error('Error signing out', error.message)
+      }else{
+        console.log('Signed out successfully');
+      }
+    }
 
-  const handleQuantity = () =>{
+    console.log(product)
 
-  }
-  
   return (
     <div className='h-screen flex-1 bg-zinc-100 space-y-6'>
         {/* Dashboard Layout */}
@@ -36,12 +43,14 @@ function Content({link}) {
             <div>
                  
             </div>
-            {/* <img src='https://imgs.search.brave.com/ytXuWG7shMoCAkjCE0MeaX60qQNElcAIfPi4Pp1TGrU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9rcG9w/cGluZy5jb20vZG9j/dW1lbnRzLzVjLzAv/Mjc1LzI0MDUxMC10/cmlwbGVTLUluc3Rh/Z3JhbS1Ud2l0dGVy/LVVwZGF0ZS1ZZW9u/amktZG9jdW1lbnRz/LTEud2VicD92PTkx/N2Vi' alt='profile' className='w-10 h-10 rounded-full object-cover object-center cursor-pointer' /> */}
+
             <div className='flex items-center gap-x-8'>
                 <FaShoppingCart  className='w-5.5 h-5.5 hover:cursor-pointer'/>
-                {/* <button className='hover:cursor-pointer' onClick={handleLogOut}>Logout</button> */}
+                <button onClick={handleSignOut}>Logout</button>
             </div>
         </div>
+
+      
 
       {/* Admin Dashboard */}
         {link === '/' && <div>
@@ -156,7 +165,6 @@ function Content({link}) {
 
         {/* Products */}
         {link === 'products' && <div>
-
         {/* Contents  */}
         <div className='w-full px-12'>
             <h1 className='text-3xl text-zinc-800 my-4'>
@@ -215,14 +223,19 @@ function Content({link}) {
           </div>
     
           <div className='flex flex-wrap flex-1 gap-4'>
-          {ShoeDetails.map((shoe, index)=>(
-            <Link to={'/Products/ProductDetails'} className='my-2 mx- p-2 border border-1 border-black bg-white rounded-md hover:cursor-pointer hover:scale-105 duration-300'>
-            <img src={shoe.image} alt='shoe' className='w-40 h-40 object-contain my-2 rounded-sm'  />
+          {products.map((shoe, index)=>(
+            <Link 
+            key={shoe.id}
+            state={{ productId: shoe.id }}
+            to={'/Products/ProductDetails'}
+            className='my-2 mx- p-2 border border-1 border-black bg-white rounded-md hover:cursor-pointer hover:scale-105 duration-300'>
+            <img src={shoe.image ? shoe.image : defaultShoeImage} alt='shoe' className='w-40 h-40 object-contain my-2 rounded-sm'  />
             <h1 className='w-40 my-2 text-xl font-semibold'>{shoe.name}</h1>
             {/* <h3>Brand: {shoe.brand}</h3> */}
             <h3>Size: {shoe.size}</h3>
             <h3 className='text-blue-600'>Price: {shoe.price}</h3>
             </Link>
+            
           ))}
           
           
@@ -319,7 +332,6 @@ function Content({link}) {
 
        {/* Product Details */}
        {link === 'productDetails' && <div>
-
         {/* Contents */}
         <div className='w-full px-12'>
             <h1 className='text-3xl text-zinc-800 my-4'>
@@ -330,15 +342,15 @@ function Content({link}) {
         <div className='w-full flex flex-wrap flex-1 gap-8 px-12'>
           {/* Left Side Part */}
         <div className='w-[45%]'>
-         <img src={'https://imgs.search.brave.com/UI1-HvL5tCMmna5yYbfdOfnw2iaNDTsaRvcfVv31GfI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMubmlrZS5jb20v/YS9pbWFnZXMvdF93/ZWJfcHdfNTkyX3Yy/L2ZfYXV0by91XzEy/NmFiMzU2LTQ0ZDgt/NGEwNi04OWI0LWZj/ZGNjOGRmMDI0NSxj/X3NjYWxlLGZsX3Jl/bGF0aXZlLHdfMS4w/LGhfMS4wLGZsX2xh/eWVyX2FwcGx5LzRk/ZTU4M2FhLTAyOGIt/NGRkNS1iMTg5LTQ5/MThjNmU0YjBkMy9K/T1JEQU4rNitSSU5H/Uy5wbmc'} alt='shoe' className='w-120 h-90 my-2 rounded-lg'/>
+         <img src={products.image ? product?.image : defaultShoeImage} alt='shoe' className='w-120 h-90 my-2 rounded-lg'/>
          </div>
 
           {/* Right Side Part */}
          <div className='w-[50%] flex-wrap'>
-          <h1 className='text-3xl font-semibold my-2'>Jordan 6 Rings</h1>
-          <h3 className='text-xl my-2'>Size: 44</h3>
-          <h3 className='text-xl my-2'>Price: 6244.00 Php</h3>
-          <h3 className='text-xl my-2'>Brand: Jordan</h3>
+          <h1 className='text-3xl font-semibold my-2'>{product?.name}</h1>
+          <h3 className='text-xl my-2'>Size: {product?.size}</h3>
+          <h3 className='text-xl my-2'>Price: {product?.price} Php</h3>
+          <h3 className='text-xl my-2'>Brand: {product?.brand}</h3>
           <div className='flex flex-row items-center gap-4 my-2'>
             <h3 className='text-lg my-2'>Quantity: </h3>
             <FaMinus className='hover:cursor-pointer'/>

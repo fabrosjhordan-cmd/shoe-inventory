@@ -10,22 +10,30 @@ import Products from './Products/index.jsx';
 import ProductDetails from './Products/ProductDetails.jsx';
 import Login from './Auth/Login.jsx';
 import AuthProvider from '../provider/AuthProvider.jsx';
+import Loader from '../components/Loader.jsx';
+import QueryProvider from '../provider/QueryProvider.jsx';
 
 const router = createBrowserRouter([
-  {path: '/', element: <App link='/' page={0} />},
-  {path: '/inventory', element: <Inventory link='inventory' page={2}/>},
-  {path: '/sales', element: <Sales link='sales' page={3}/>},
-  {path: '/products', element: <Products link='products' page={4} />},
-  {path: '/products/productdetails', element: <ProductDetails link='productDetails' />},
+  {element: <Loader />,
+    children: [
+      {path: '/', element: <App link='/' page={0} />},
+      {path: '/inventory', element: <Inventory link='inventory' page={2}/>},
+      {path: '/sales', element: <Sales link='sales' page={3}/>},
+      {path: '/products', element: <Products link='products' page={4} />},
+      {path: '/products/productdetails', element: <ProductDetails link='productDetails' />},
+    ],
+  },
   {path: '/auth/login', element: <Login />},
   {path: '*', element: <ErrorPage />}
 ]);
 
 createRoot(document.getElementById('root')).render(
-  <AuthProvider>
   <StrictMode>
+  <AuthProvider>
+    <QueryProvider>
     {/* <App /> */}
     <RouterProvider router={router} />
-  </StrictMode>,
+    </QueryProvider>
   </AuthProvider>
+  </StrictMode>,
 )
